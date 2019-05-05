@@ -206,9 +206,11 @@ class Job
      *
      * @return self
      */
-    public function setLogo(?string $logo): self
+    public function setLogo($logo) : self
     {
         $this->logo = $logo;
+
+        return $this;
     }
 
     /**

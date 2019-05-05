@@ -98,7 +98,7 @@ class JobType extends AbstractType
             )
             ->add(
                 'activated',
-                TextType::class,
+                ChoiceType::class,
                 [
                     'choices'  => [ 'Yes' => true, 'No' => false ],
                     'constraints' => [ new NotNull() ]
@@ -118,13 +118,6 @@ class JobType extends AbstractType
                     'class' => Category::class,
                     'choice_label' => 'name',
                     'constraints' => [ new NotBlank() ]
-                ]
-            )
-            ->add(
-                'token',
-                TextType::class,
-                [
-                    'constraints' => [ new NotBlank(), new Length(['max' => 255]) ]
                 ]
             );
     }
