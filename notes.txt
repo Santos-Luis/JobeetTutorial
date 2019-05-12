@@ -1,0 +1,14 @@
+Sometimes things just don't work the way the tutorial tell they should. On that case you should do 3 things:
+	1. The obvious one, read carefully your code and try to understand what is happening, sometimes is really easy to spot the mistake;
+	2. Check the github code, that way you will be able to compare much easier the "correct" code with yours. Plus, there are a few changes in the github that the authors didn't add to the online tutorial;
+	3. The one that usually works when you are about to give up on the project: reset everything, the docker-compose, the DB, the fixtures, everything. For some reason, even after cleaning the cache, there were several times my code didn't work the way I expected (usually bc I tried to change the way something was done, and then I lost myself in tutorial track). On that ocasions, after I cleaned the all environment, everything worked like a charm.
+
+At the beginning, the docker-compose.yml has the port 80:80 defined to run the webserver. This usually leads to errors since that specific port is often in use. You have 2 ways to solve this problem (if it is a problem for you):
+	1. Stop the process that is running on that port with the "apache stop" command;
+	2. Change in the docker-compose.yml file the port (e.g. to "8040:80")
+The 2nd alternative is probably the recommendaded, but you need to change the way you open the running project. Since the tutorial tells you to access to http://127.0.0.1 (same as typing 'localhost'), when you change the webserver port, that address will not work for you. Instead, you need to go to the localhost:8040
+
+Another thing that was a little bit confusing to me, was the migrations part, since I never worked with them. At the first everything went just fine, I followed the tutorial and it worked for me. Although, I stopped the tutorial in day 6 and continued a few days later. So, I tried to run the migrations again to just "replicate some previous steps", and it always outputed me an error saying that the tables where already created, so the migration didn't went through. By that time it was fine, I just load the fixtures and everything worked like a charm. BUT at day 7 when they tell you to run a new migration that will change your tables, it didn't worked so well. So, for some reason (possibly something that I did wrong) when you use the migrate command it runs all the migrations that you have on your Migrations folder. Meaning, you will first run the previous migration and only then the second one. But, when the system tries to run the second migration, it enter in conflict with the first one. Solution: delete the previous migrations files..
+
+Yet in the migrations part, in day 3 they tell you to "check you database". If you were just confused as I was at the time, there are a command (introduced later in the tutorial) that allows you to query the database using normal SQL queries:
+	bin/console doctrine:query:sql 'SELECT * from jobs'
