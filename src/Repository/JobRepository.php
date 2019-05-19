@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Affiliate;
 use App\Entity\Category;
 use App\Entity\Job;
 use Doctrine\ORM\AbstractQuery;
@@ -40,7 +41,7 @@ class JobRepository extends EntityRepository
      *
      * @throws \Exception
      */
-    public function findActiveJob(int $id) : ?Job
+    public function findActiveJob(int $id): ?Job
     {
         return $this->createQueryBuilder('j')
             ->where('j.id = :id')
@@ -60,7 +61,7 @@ class JobRepository extends EntityRepository
      *
      * @throws \Exception
      */
-    public function getPaginatedActiveJobsByCategoryQuery(Category $category) : AbstractQuery
+    public function getPaginatedActiveJobsByCategoryQuery(Category $category): AbstractQuery
     {
         return $this->createQueryBuilder('j')
             ->where('j.category = :category')
@@ -70,5 +71,29 @@ class JobRepository extends EntityRepository
             ->setParameter('date', new \DateTime())
             ->setParameter('activated', true)
             ->getQuery();
+    }
+
+    /**
+     * @param Affiliate $affiliate
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function findActiveJobsForAffiliate(Affiliate $affiliate)
+    {
+        return $this->createQueryBuilder('j')
+            ->leftJoin('j.category', 'c')
+            ->leftJoin('c.affiliates', 'a')
+            ->where('a.id = :affiliate')
+            ->andWhere('j.expiresAt > :date')
+            ->andWhere('j.activated = :activated')
+            ->setParameter('affiliate', $affiliate)
+            ->setParameter('date', new \DateTime())
+            ->setParameter('activated', true)
+            ->orderBy('j.expiresAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
     }
 }

@@ -72,7 +72,7 @@ class Affiliate
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -88,71 +88,83 @@ class Affiliate
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
     /**
      * @param string $url
+     *
+     * @return self
      */
-    public function setUrl(string $url): void
+    public function setUrl(string $url) : self
     {
         $this->url = $url;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     /**
      * @param string $email
+     *
+     * @return self
      */
-    public function setEmail(string $email): void
+    public function setEmail(string $email) : self
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getToken(): string
+    public function getToken() : ?string
     {
         return $this->token;
     }
 
     /**
-     * @param string $token
+     * @param string|null $token
+     *
+     * @return self
      */
-    public function setToken(string $token): void
+    public function setToken(?string $token) : self
     {
         $this->token = $token;
+        return $this;
     }
 
     /**
      * @return bool
      */
-    public function isActive(): bool
+    public function isActive() : ?bool
     {
         return $this->active;
     }
 
     /**
      * @param bool $active
+     *
+     * @return self
      */
-    public function setActive(bool $active): void
+    public function setActive(bool $active) : self
     {
         $this->active = $active;
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt() : ?\DateTime
     {
         return $this->createdAt;
     }
@@ -174,14 +186,32 @@ class Affiliate
     }
 
     /**
-     * @param Category[]|ArrayCollection $categories
+     * @param Category $category
+     *
+     * @return self
      */
-    public function setCategories($categories): void
+    public function addCategory(Category $category) : self
     {
-        $this->categories = $categories;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
     }
 
     /**
+     * @param Category $category
+     *
+     * @return self
+     */
+    public function removeCategory(Category $category) : self
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+        /**
      * @ORM\PrePersist
      *
      * @throws \Exception
